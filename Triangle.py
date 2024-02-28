@@ -25,7 +25,7 @@ sns.heatmap(triangle,annot=True,fmt=".1%",cmap="RdYlGn",vmin=-0.4,vmax=0.15,cent
 plt.tick_params(axis="y",labelright=True)
 
 
-#for 100 PLN (or other for fixet FX):
+#for 100 PLN (or other for fixed FX):
 
 ticker = ["MSFT"]
 df = yf.download(ticker,start="2000-01-01",end="2023-12-31")
