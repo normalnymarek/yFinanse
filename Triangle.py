@@ -46,4 +46,24 @@ sns.heatmap(traingle, annot=True, fmt=".0f", cmap="RdYlGn",vmin=70,vmax=200, cen
 plt.tick_params(axis="y",labelright=True)
 
 
+#weekly
+
+
+tygodnie = df_closed.resample(rule="W", kind = "period").last()
+tygodnie.head()
+tygodnie["zwrot"] = np.log(tygodnie.Close/tygodnie.Close.shift(periods=1)) * 52
+tygodnie.dropna(inplace=True)
+periods = tygodnie.index.size
+windows = [week for week in range(periods,0,-1)]
+
+new_columns = {}
+
+for week in windows:
+    new_columns[f"{week}W"] = tygodnie.zwrot.rolling(week).mean()
+tygodnie = pd.concat([tygodnie, pd.DataFrame(new_columns)], axis=1)
+triangle = tygodnie.drop(columns=["Close","zwrot"])
+plt.figure(figsize=(30,20))
+sns.set(font_scale=1.3)
+sns.heatmap(triangle,annot=False,fmt=".0f",cmap="RdYlGn",vmin=-0.1,vmax=0.1,center=0)
+
 
