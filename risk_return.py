@@ -17,3 +17,20 @@ ax.axhline(y=0,color='black',linewidth=1)
 
 mont_ret.iloc[:,-2:].corr()
 mont_ret.iloc[:,-2:].plot(kind="scatter",x="risk",y="return",figsize=(10,6))
+
+#log
+
+
+ticker = ["MSFT"]
+df = yf.download(ticker, start="2020-01-01", end="2023-12-04")
+df_closed = df.loc[:,"Close"].to_frame()
+
+#regular aritmetical mean
+mont_ret['return'] = df_closed.resample(rule="Y",kind="period").last().pct_change()
+mont_ret.dropna(inplace=True)
+mont_ret
+
+#log - better calculation for average return
+log_ret = np.log(mont_ret.Close/mont_ret.Close.shift(1)).dropna()
+log_ret.mean()
+336.320007 * np.exp(2 * log_ret.mean())
