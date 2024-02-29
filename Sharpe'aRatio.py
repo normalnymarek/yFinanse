@@ -117,7 +117,55 @@ plt.ylabel("roczny zwrot",fontsize=14)
 plt.title("zwrot/ryzyko",fontsize=18)
 
 
+max_sharpe_id = port_summ.sharpe.idxmax()
+max_sharpe_stat = port_summ.iloc[max_sharpe_id]
+max_sharp_wagi = wagi[max_sharpe_id,:]
+best_wagi = pd.Series(index=ret.columns,data=max_sharp_wagi)
+best_wagi.plot(kind="bar")
+sns.set_theme(context="notebook",style="darkgrid",palette="deep")
+plt.figure(figsize=(12,6))
+plt.scatter(
+    x = port_summ.loc[:,"ryzyko"],
+    y = port_summ.loc[:,"zwrot"],
+    s=15,
+    c=port_summ.loc[:,"sharpe"],
+    cmap="coolwarm",
+    alpha=0.15,
+    vmin=0.6,
+    vmax=0.98
+)
 
+plt.scatter(
+    x=summary.loc[:,"ryzyko"],
+    y=summary.loc[:,"zwrot"],
+    s=25,
+    c=summary.loc[:,"sharpe"],
+    cmap="coolwarm",
+    marker="x"
+)
+
+specific_point = port_summ.loc[port_summ.index==136120]
+plt.scatter(
+    x = specific_point["ryzyko"],
+    y = specific_point["zwrot"],
+    s = 100, #rozmiar
+    c = "black",
+    marker ="*",
+)
+
+plt.annotate(
+    'Max SR Portfel',
+    xy = (specific_point["ryzyko"], specific_point["zwrot"]),
+    xytext=(5,5),
+    textcoords='offset points',
+)
+
+plt.colorbar()
+for i in summary.index:
+    plt.annotate(i,xy=(summary.loc[i,"ryzyko"]+0.003,summary.loc[i,"zwrot"]+0.003),size=12)
+plt.xlabel("roczne ryzyko",fontsize=14)
+plt.ylabel("roczny zwrot",fontsize=14)
+plt.title("zwrot/ryzyko",fontsize=18)
 
 
 
